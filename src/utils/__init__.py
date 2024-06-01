@@ -2,6 +2,7 @@ import os
 import sys
 import yaml
 import json
+import dill
 from src.exception import CustomException
 from src.logger import logging
 from datetime import datetime
@@ -33,5 +34,18 @@ def read_from_csv_file(file_path: str) -> pd.DataFrame:
         df = pd.read_csv(file_path)
         logging.info(f"Finished reading csv file at: {file_path}")
         return df
+    except Exception as e:
+        raise CustomException(e)
+
+
+def load_object(file_path: str) -> object:
+    logging.info("Loading the model object....")
+
+    try:
+        with open(file_path, "rb") as file:
+            obj = dill.load(file)
+            logging.info("Successfully Loaded model object ......")
+            return obj
+
     except Exception as e:
         raise CustomException(e)
