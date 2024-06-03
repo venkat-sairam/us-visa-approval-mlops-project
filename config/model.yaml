@@ -1,0 +1,17 @@
+training_pipeline_config:
+  pipeline_name: src
+  artifact_dir: artifact
+
+data_ingestion_config:
+  data_ingestion_artifact_dir: data_ingestion_artifact
+  raw_data_dir: raw_data_dir
+  ingested_dir: ingested_dir
+  ingested_train_dir: ingested_train_dir
+  ingested_test_dir: ingested_test_dir
+  collection_name: us-visa-collection
+  train_test_split_ratio: 0.2
+
+data_validation_config:
+  data_validation_artifact_dir: data_validation_artifact
+  report_dir: drift_report_directory
+  report_file_name: report.yaml
