@@ -1,6 +1,6 @@
 # Ignore the environment variables
 visa_project_venv/
-
+src/artifact/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
