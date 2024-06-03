@@ -1,5 +1,6 @@
 import os
 import sys
+from dotenv import load_dotenv
 import yaml
 import json
 import dill
@@ -7,8 +8,18 @@ from src.exception import CustomException
 from src.logger import logging
 from datetime import datetime
 import pandas as pd
+import numpy as np
 
 timestamp_format = "%Y-%m-%d_%H-%M-%S"
+
+
+def load_environmental_variables():
+    load_dotenv()
+
+
+def get_environment_variables(variable_name: str) -> str:
+    load_environmental_variables()
+    return os.getenv(variable_name)
 
 
 def read_yaml_file(filename):
@@ -22,6 +33,18 @@ def read_yaml_file(filename):
 
     except Exception as e:
         raise CustomException(e)
+
+
+def write_yaml_file(file_path: str, content: object, replace: bool = False) -> None:
+    try:
+        if replace:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, "w") as file:
+            yaml.dump(content, file)
+    except Exception as e:
+        raise CustomException(e, sys) from e
 
 
 def get_current_timestamp():
