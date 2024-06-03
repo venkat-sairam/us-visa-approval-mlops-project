@@ -15,5 +15,14 @@ os.makedirs(log_dir, exist_ok=True)
 logging.basicConfig(
     filename=logs_path,
     format="[ %(asctime)s ] %(name)s - %(levelname)s - %(message)s",
-    level=logging.DEBUG,
+    level=logging.INFO,
 )
+# Create a console handler
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+console_handler.setFormatter(
+    logging.Formatter("[ %(asctime)s ] %(name)s - %(levelname)s - %(message)s")
+)
+
+# Add the console handler to the root logger
+logging.getLogger().addHandler(console_handler)
