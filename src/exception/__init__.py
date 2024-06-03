@@ -1,22 +1,27 @@
-import traceback
-import os, sys
+import os
+import sys
+from typing import Optional
+
+
+def error_message_detail(error, error_detail: sys):
+    _, _, exc_tb = error_detail.exc_info()
+    file_name = exc_tb.tb_frame.f_code.co_filename
+    error_message = "Error occurred python script name [{0}] line number [{1}] error message [{2}]".format(
+        file_name, exc_tb.tb_lineno, str(error)
+    )
+
+    return error_message
 
 
 class CustomException(Exception):
-    def __init__(self, error, error_detail):
-        self.error = error
-        self.error_detail = error_detail
-        self.format_error_message()
-
-    def format_error_message(self):
-        exc_type, exc_value, exc_traceback = self.error_detail.exc_info()
-        filename, line_number, function_name, code = traceback.extract_tb(
-            exc_traceback
-        )[-1]
-
-        filename = os.path.relpath(filename, os.getcwd())
-
-        self.error_message = f"Exception occurred in [{filename}] at line number [{line_number}] with error: {str(self.error)}"
+    def __init__(self, error_message, error_detail: Optional[str] = sys):
+        """
+        :param error_message: error message in string format
+        """
+        super().__init__(error_message)
+        self.error_message = error_message_detail(
+            error_message, error_detail=error_detail
+        )
 
     def __str__(self):
         return self.error_message
