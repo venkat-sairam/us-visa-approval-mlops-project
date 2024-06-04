@@ -9,3 +9,13 @@ DataIngestionArtifact = namedtuple(
 DataValidationArtifact = namedtuple(
     "DataValidationArtifact", ["validation_status", "message", "drift_report_file_path"]
 )
+
+
+DataTransformationArtifact = namedtuple(
+    "DataTransformationArtifact",
+    [
+        "transformed_object_file_path",
+        "transformed_training_file_path",
+        "transformed_test_file_path",
+    ],
+)

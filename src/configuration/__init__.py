@@ -1,5 +1,6 @@
 from src.entity.config_entity import (
     DataIngestionConfig,
+    DataTransformationConfig,
     DataValidationConfig,
     TrainingPipelineConfig,
 )
@@ -118,3 +119,58 @@ class Configuration:
             f"Validation configuration details: {data_validation_configuration_information}"
         )
         return data_validation_configuration_information
+
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        artifact_dir = self.training_pipeline_config.artifact_dir
+        self.data_transformation_config = self.config_info[
+            DATA_TRANSFORMATION_CONFIG_KEY
+        ]
+        data_transformation_artifact_dir = os.path.join(
+            ROOT_DIR,
+            artifact_dir,
+            self.data_transformation_config[DATA_TRANSFORMATION_ARTIFACT_DIR_KEY],
+        )
+
+        transformed_dir = os.path.join(
+            data_transformation_artifact_dir,
+            self.data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_DIR_KEY],
+        )
+
+        transformed_train_dir = os.path.join(
+            transformed_dir,
+            self.data_transformation_config[
+                DATA_TRANSFORMATION_TRANSFORMED_TRAIN_DIR_KEY
+            ],
+        )
+        transformed_test_dir = os.path.join(
+            transformed_dir,
+            self.data_transformation_config[
+                DATA_TRANSFORMATION_TRANSFORMED_TEST_DIR_KEY
+            ],
+        )
+
+        preprocessed_dir = os.path.join(
+            data_transformation_artifact_dir,
+            self.data_transformation_config[DATA_TRANSFORMATION_PREPROCESSED_DIR_KEY],
+        )
+
+        preprocessed_file_path = os.path.join(
+            preprocessed_dir,
+            self.data_transformation_config[
+                DATA_TRANSFORMATION_PREPROCESSED_OBJECT_FILE_NAME_KEY
+            ],
+        )
+
+        data_transformation_configuration_details = DataTransformationConfig(
+            transformed_directory=transformed_dir,
+            transformed_train_directory=transformed_train_dir,
+            transformed_test_directory=transformed_test_dir,
+            preprocessed_directory=preprocessed_dir,
+            preprocessed_object_file_name=preprocessed_file_path,
+        )
+
+        logging.info(
+            f"Data Transformation configuration details are: {data_transformation_configuration_details}"
+        )
+
+        return data_transformation_configuration_details

@@ -19,3 +19,15 @@ DataIngestionConfig = namedtuple(
 DataValidationConfig = namedtuple(
     "DataValidationConfig", ["report_dir", "drift_report_file_path"]
 )
+
+
+DataTransformationConfig = namedtuple(
+    "DataTransformationConfig",
+    [
+        "transformed_directory",
+        "transformed_train_directory",
+        "transformed_test_directory",
+        "preprocessed_directory",
+        "preprocessed_object_file_name",
+    ],
+)

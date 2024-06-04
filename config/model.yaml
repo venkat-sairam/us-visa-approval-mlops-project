@@ -15,3 +15,11 @@ data_validation_config:
   data_validation_artifact_dir: data_validation_artifact
   report_dir: drift_report_directory
   report_file_name: report.yaml
+
+data_transformation_config:
+  data_transformation_artifact_dir: data_transformation_artifact
+  transformed_dir: transformed_dir
+  transformed_train_dir: transformed_train_dir
+  transformed_test_dir: transformed_test_dir
+  preprocessed_dir: processed_dir
+  preprocessed_object_file_name: preprocessed_object_file_name

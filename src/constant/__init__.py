@@ -55,3 +55,15 @@ DATA_VALIDATION_ARTIFACTS_DIR_NAME_KEY: str = "data_validation_artifact_dir"
 DATA_VALIDATION_REPORT_DIR_NAME_KEY: str = "report_dir"
 DATA_VALIDATION_REPORT_FILE_NAME_KEY: str = "report_file_name"
 DATA_VALIDATION_DRIFT_REPORT_FILE_PATH_KEY: str = "drift_report_file_path"
+
+
+# Data transformation constants
+DATA_TRANSFORMATION_CONFIG_KEY: str = "data_transformation_config"
+DATA_TRANSFORMATION_ARTIFACT_DIR_KEY: str = "data_transformation_artifact_dir"
+DATA_TRANSFORMATION_TRANSFORMED_DIR_KEY: str = "trasformed_dir"
+DATA_TRANSFORMATION_TRANSFORMED_TRAIN_DIR_KEY: str = "transformed_train_dir"
+DATA_TRANSFORMATION_TRANSFORMED_TEST_DIR_KEY: str = "transformed_test_dir"
+DATA_TRANSFORMATION_PREPROCESSED_DIR_KEY: str = "preprocessed_dir"
+DATA_TRANSFORMATION_PREPROCESSED_OBJECT_FILE_NAME_KEY: str = (
+    "preprocessed_object_file_name"
+)
