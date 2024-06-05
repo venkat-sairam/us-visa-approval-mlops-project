@@ -18,6 +18,8 @@ from src.utils import (
     save_numpy_array_data,
     save_object,
     sys,
+    pd,
+    np,
 )
 from sklearn.preprocessing import (
     StandardScaler,
@@ -27,8 +29,9 @@ from sklearn.preprocessing import (
 )
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from imblearn.combine import SMOTEENN
-from src.utils import pd, np, sys
+
+# from imblearn.combine import SMOTEENN
+# from imblearn.over_sampling import SMOTE
 
 
 class DataTransformation:
@@ -122,16 +125,20 @@ class DataTransformation:
                 file_path=self.data_ingestion_artifact.test_file_path
             )
             train_input_dataframe, train_target_dataframe = (
-                self.get_input_and_output_features(training_dataframe)
+                self.get_input_and_output_features(
+                    target_feature=TARGET_COLUMN, df=training_dataframe
+                )
             )
             test_input_dataframe, test_target_dataframe = (
-                self.get_input_and_output_features(testing_dataframe)
+                self.get_input_and_output_features(
+                    target_feature=TARGET_COLUMN, df=testing_dataframe
+                )
             )
 
             logging.info(
                 f"Columns in the training features are: {train_input_dataframe.columns}"
             )
-            logging.info(f"Target feature: {train_target_dataframe.columns}")
+            logging.info(f"Target feature: {train_target_dataframe.name}")
             train_input_features = self.preprocess_target_column(
                 df=train_input_dataframe
             )
@@ -148,43 +155,43 @@ class DataTransformation:
             logging.info(
                 "Applying SMOTEEN on the training data to handle imbalance issues"
             )
-            smt = SMOTEENN(sampling_strategy="minority")
+            # smt = SMOTEENN(sampling_strategy="minority")
 
-            final_train_input_features, final_train_target_feature = smt.fit_resample(
-                train_input_features_numpy_arr, train_target_dataframe
-            )
-            logging.info("Applied  SMOTEEN on the training dataset")
-            logging.info("Applying SMOTEEN on the testing dataset")
-            final_test_input_features, final_test_target_features = smt.fit_resample(
-                test_input_features_numpy_arr, test_target_dataframe
-            )
-            logging.info("Applied SMOTEEN on the testing dataset")
+            # final_train_input_features, final_train_target_feature = smt.fit_resample(
+            #     train_input_features_numpy_arr, train_target_dataframe
+            # )
+            # logging.info("Applied  SMOTEEN on the training dataset")
+            # logging.info("Applying SMOTEEN on the testing dataset")
+            # final_test_input_features, final_test_target_features = smt.fit_resample(
+            #     test_input_features_numpy_arr, test_target_dataframe
+            # )
+            # logging.info("Applied SMOTEEN on the testing dataset")
 
             train_data = np.c_[
-                final_train_input_features, np.array(final_train_target_feature)
+                train_input_features_numpy_arr, np.array(train_target_dataframe)
             ]
 
             test_data = np.c_[
-                final_test_input_features, np.array(final_test_target_features)
+                test_input_features_numpy_arr, np.array(test_target_dataframe)
             ]
 
             save_object(
-                file_path=self.data_transformation_config.preprocessed_object_file_name,
+                file_path=self.data_transformation_config.preprocessed_object_file_path,
                 obj=preprocessor,
             )
             save_numpy_array_data(
-                file_path=self.data_transformation_config.transformed_train_directory,
+                file_path=self.data_transformation_config.transformed_train_file_path,
                 array=train_data,
             )
             save_numpy_array_data(
-                file_path=self.data_transformation_config.transformed_test_directory,
+                file_path=self.data_transformation_config.transformed_test_file_path,
                 array=test_data,
             )
 
             data_transformation_artifact_details = DataTransformationArtifact(
-                transformed_object_file_path=self.data_transformation_config.preprocessed_object_file_name,
-                transformed_training_file_path=self.data_transformation_config.transformed_train_directory,
-                transformed_test_file_path=self.data_transformation_config.transformed_test_directory,
+                transformed_object_file_path=self.data_transformation_config.preprocessed_object_file_path,
+                transformed_training_file_path=self.data_transformation_config.transformed_train_file_path,
+                transformed_test_file_path=self.data_transformation_config.transformed_test_file_path,
             )
             logging.info(
                 f"Data transformation artifact details are: {data_transformation_artifact_details}"

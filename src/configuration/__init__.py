@@ -23,7 +23,9 @@ class Configuration:
         self.training_pipeline_info = self.config_info[TRAINING_PIPELINE_CONFIG_KEY]
         pipeline_name = self.training_pipeline_info[TRAINING_PIPELINE_NAME_KEY]
         artifact_dir = self.training_pipeline_info[TRAINING_PIPELINE_ARTIFACT_DIR_KEY]
-        artifact_directory_path = os.path.join(ROOT_DIR, pipeline_name, artifact_dir)
+        artifact_directory_path = os.path.join(
+            ROOT_DIR, pipeline_name, artifact_dir, self.time_stamp
+        )
         logging.info(f"Artifact directory path is: {artifact_directory_path}")
         training_pipeline_configuration_details = TrainingPipelineConfig(
             artifact_dir=artifact_directory_path
@@ -44,9 +46,7 @@ class Configuration:
         ]
 
         self.data_ingestion_artifact_path = os.path.join(
-            self.artifact_dir,
-            self.data_ingestion_artifact_dir_name,
-            self.time_stamp,
+            self.artifact_dir, self.data_ingestion_artifact_dir_name
         )
         raw_data_dir = os.path.join(
             self.data_ingestion_artifact_path,
@@ -98,10 +98,7 @@ class Configuration:
             DATA_VALIDATION_ARTIFACTS_DIR_NAME_KEY
         ]
         data_validation_artifact_path = os.path.join(
-            ROOT_DIR,
-            artifact_dir,
-            data_validation_artifact_directory_name,
-            self.time_stamp,
+            artifact_dir, data_validation_artifact_directory_name 
         )
         report_directory = os.path.join(
             data_validation_artifact_path,
@@ -126,7 +123,6 @@ class Configuration:
             DATA_TRANSFORMATION_CONFIG_KEY
         ]
         data_transformation_artifact_dir = os.path.join(
-            ROOT_DIR,
             artifact_dir,
             self.data_transformation_config[DATA_TRANSFORMATION_ARTIFACT_DIR_KEY],
         )
@@ -136,16 +132,16 @@ class Configuration:
             self.data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_DIR_KEY],
         )
 
-        transformed_train_dir = os.path.join(
+        transformed_train_file = os.path.join(
             transformed_dir,
             self.data_transformation_config[
-                DATA_TRANSFORMATION_TRANSFORMED_TRAIN_DIR_KEY
+                DATA_TRANSFORMATION_TRANSFORMED_TRAIN_FILE_KEY
             ],
         )
-        transformed_test_dir = os.path.join(
+        transformed_test_file = os.path.join(
             transformed_dir,
             self.data_transformation_config[
-                DATA_TRANSFORMATION_TRANSFORMED_TEST_DIR_KEY
+                DATA_TRANSFORMATION_TRANSFORMED_TEST_FILE_KEY
             ],
         )
 
@@ -163,10 +159,10 @@ class Configuration:
 
         data_transformation_configuration_details = DataTransformationConfig(
             transformed_directory=transformed_dir,
-            transformed_train_directory=transformed_train_dir,
-            transformed_test_directory=transformed_test_dir,
+            transformed_train_file_path=transformed_train_file,
+            transformed_test_file_path=transformed_test_file,
             preprocessed_directory=preprocessed_dir,
-            preprocessed_object_file_name=preprocessed_file_path,
+            preprocessed_object_file_path=preprocessed_file_path,
         )
 
         logging.info(

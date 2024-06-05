@@ -25,9 +25,9 @@ DataTransformationConfig = namedtuple(
     "DataTransformationConfig",
     [
         "transformed_directory",
-        "transformed_train_directory",
-        "transformed_test_directory",
+        "transformed_train_file_path",
+        "transformed_test_file_path",
         "preprocessed_directory",
-        "preprocessed_object_file_name",
+        "preprocessed_object_file_path",
     ],
 )
