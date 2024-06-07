@@ -2,6 +2,7 @@ from src.entity.config_entity import (
     DataIngestionConfig,
     DataTransformationConfig,
     DataValidationConfig,
+    ModelTrainerConfig,
     TrainingPipelineConfig,
 )
 from src.utils import read_yaml_file
@@ -98,7 +99,7 @@ class Configuration:
             DATA_VALIDATION_ARTIFACTS_DIR_NAME_KEY
         ]
         data_validation_artifact_path = os.path.join(
-            artifact_dir, data_validation_artifact_directory_name 
+            artifact_dir, data_validation_artifact_directory_name
         )
         report_directory = os.path.join(
             data_validation_artifact_path,
@@ -170,3 +171,38 @@ class Configuration:
         )
 
         return data_transformation_configuration_details
+
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+
+        artifact_dir = self.training_pipeline_config.artifact_dir
+        model_trainer_config = self.config_info[MODEL_TRAINER_CONFIG_KEY]
+        model_trainer_artifact = os.path.join(artifact_dir, MODEL_TRAINER_ARTIFACT_DIR)
+        trained_model_directory = os.path.join(
+            model_trainer_artifact,
+            model_trainer_config[MODEL_TRAINER_TRAINED_MODEL_DIR_KEY],
+        )
+
+        trained_model_file_path = os.path.join(
+            trained_model_directory,
+            model_trainer_config[MODEL_TRAINER_TRAINED_MODEL_FILE_NAME_KEY],
+        )
+        accuracy = model_trainer_config[MODEL_TRAINER_BASE_ACCURACY_KEY]
+        model_config_directory = os.path.join(
+            ROOT_DIR, model_trainer_config[MODEL_TRAINER_MODEL_CONFIG_DIR_KEY]
+        )
+        model_config_file_path = os.path.join(
+            model_config_directory,
+            model_trainer_config[MODEL_TRAINER_MODEL_CONFIG_FILE_NAME_KEY],
+        )
+
+        model_trainer_configuration_details = ModelTrainerConfig(
+            trained_model_file_path=trained_model_file_path,
+            base_accuracy=accuracy,
+            model_config_file_path=model_config_file_path,
+        )
+
+        logging.info(
+            f"Model Trainer configuration details are: {model_trainer_configuration_details}"
+        )
+
+        return model_trainer_configuration_details
