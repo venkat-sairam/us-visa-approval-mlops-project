@@ -30,7 +30,8 @@ from sklearn.preprocessing import (
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 
-# from imblearn.combine import SMOTEENN
+from imblearn.combine import SMOTEENN
+
 # from imblearn.over_sampling import SMOTE
 
 
@@ -91,7 +92,9 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e, sys)
 
-    def preprocess_target_column(self, df: pd.DataFrame, is_training_df: bool = True):
+    def preprocess_target_column(
+        self, df: pd.DataFrame, target, is_training_df: bool = True
+    ):
 
         try:
             df["company_age"] = CURRENT_YEAR - df["yr_of_estab"]
@@ -101,8 +104,8 @@ class DataTransformation:
             logging.info(f"Created new column 'company_age' in the {msg+msg2}...")
             cols_to_drop = self.schema_configuration["drop_columns"]
             df = drop_columns(df=df, cols=cols_to_drop)
-            df = df.replace(TargetValueMapping()._asdict())
-            return df
+            target = target.apply(lambda x: 1 if x == "Certified" else 0)
+            return df, target
         except Exception as e:
             raise CustomException(e, sys)
 
@@ -139,11 +142,15 @@ class DataTransformation:
                 f"Columns in the training features are: {train_input_dataframe.columns}"
             )
             logging.info(f"Target feature: {train_target_dataframe.name}")
-            train_input_features = self.preprocess_target_column(
-                df=train_input_dataframe
+            train_input_features, train_target_dataframe = (
+                self.preprocess_target_column(
+                    df=train_input_dataframe, target=train_target_dataframe
+                )
             )
-            test_input_features = self.preprocess_target_column(
-                df=test_input_dataframe, is_training_df=False
+            test_input_features, test_target_dataframe = self.preprocess_target_column(
+                df=test_input_dataframe,
+                is_training_df=False,
+                target=test_target_dataframe,
             )
             train_input_features_numpy_arr = preprocessor.fit_transform(
                 train_input_features
@@ -155,24 +162,24 @@ class DataTransformation:
             logging.info(
                 "Applying SMOTEEN on the training data to handle imbalance issues"
             )
-            # smt = SMOTEENN(sampling_strategy="minority")
+            smt = SMOTEENN(sampling_strategy="minority")
 
-            # final_train_input_features, final_train_target_feature = smt.fit_resample(
-            #     train_input_features_numpy_arr, train_target_dataframe
-            # )
-            # logging.info("Applied  SMOTEEN on the training dataset")
-            # logging.info("Applying SMOTEEN on the testing dataset")
-            # final_test_input_features, final_test_target_features = smt.fit_resample(
-            #     test_input_features_numpy_arr, test_target_dataframe
-            # )
-            # logging.info("Applied SMOTEEN on the testing dataset")
+            final_train_input_features, final_train_target_feature = smt.fit_resample(
+                train_input_features_numpy_arr, train_target_dataframe
+            )
+            logging.info("Applied  SMOTEEN on the training dataset")
+            logging.info("Applying SMOTEEN on the testing dataset")
+            final_test_input_features, final_test_target_features = smt.fit_resample(
+                test_input_features_numpy_arr, test_target_dataframe
+            )
+            logging.info("Applied SMOTEEN on the testing dataset")
 
             train_data = np.c_[
-                train_input_features_numpy_arr, np.array(train_target_dataframe)
+                final_train_input_features, np.array(final_train_target_feature)
             ]
 
             test_data = np.c_[
-                test_input_features_numpy_arr, np.array(test_target_dataframe)
+                final_test_input_features, np.array(final_test_target_features)
             ]
 
             save_object(
@@ -196,5 +203,6 @@ class DataTransformation:
             logging.info(
                 f"Data transformation artifact details are: {data_transformation_artifact_details}"
             )
+            return data_transformation_artifact_details
         except Exception as e:
             raise CustomException(e, sys)
