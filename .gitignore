@@ -1,6 +1,7 @@
 # Ignore the environment variables
 visa_project_venv/
 src/artifact/
+notebooks/catboost_info/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
