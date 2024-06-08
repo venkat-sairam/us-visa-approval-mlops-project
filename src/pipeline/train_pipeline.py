@@ -19,7 +19,7 @@ def print_before_execution(func):
         logging.info(f"{'>>'*12} Executing function: {func.__name__}  {'<<' * 12}")
         result = func(*args, **kwargs)
         logging.info(
-            f"{'>>'*12} Finished executing function: {func.__name__}  {'<<' * 12}"
+            f"{'>>'*12} Finished executing: {func.__name__}  {'<<' * 12}"
         )
         return result
 
