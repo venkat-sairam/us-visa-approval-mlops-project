@@ -29,3 +29,14 @@ ModelTrainerArtifact = namedtuple(
         "model_metrics",
     ],
 )
+
+
+ModelEvaluationArtifact = namedtuple(
+    "ModelEvaluationArtifact",
+    [
+        "is_evaluated",
+        "s3_model_path",
+        "trained_model_file_path",
+        "difference_in_accuracy",
+    ],
+)
