@@ -1,5 +1,6 @@
 from src.components.data_transformation import DataTransformation
 from src.components.data_validation import DataValidation
+from src.components.model_evaluation import ModelEvaluation
 from src.components.model_trainer import ModelTrainer
 from src.configuration import Configuration
 from src.logger import logging
@@ -18,9 +19,7 @@ def print_before_execution(func):
     def wrapper(*args, **kwargs):
         logging.info(f"{'>>'*12} Executing function: {func.__name__}  {'<<' * 12}")
         result = func(*args, **kwargs)
-        logging.info(
-            f"{'>>'*12} Finished executing: {func.__name__}  {'<<' * 12}"
-        )
+        logging.info(f"{'>>'*12} Finished executing: {func.__name__}  {'<<' * 12}")
         return result
 
     return wrapper
@@ -90,5 +89,21 @@ class TrainPipeline:
             self.model_trainer_artifact = model_trainer._initiate_model_trainer()
             logging.info("Model training completed...")
             return self.model_trainer_artifact
+        except Exception as e:
+            raise CustomException(e)
+
+    @print_before_execution
+    def start_model_evaluation(self):
+        try:
+            model_evaluation = ModelEvaluation(
+                data_ingestion_artifact=self.data_ingestion_artifact,
+                model_trainer_artifact=self.model_trainer_artifact,
+                model_evaluation_config=self.config.get_model_evaluation_config(),
+            )
+
+            self.model_evaluation_artifact = (
+                model_evaluation.initiate_model_evaluation()
+            )
+            return self.model_evaluation_artifact
         except Exception as e:
             raise CustomException(e)
