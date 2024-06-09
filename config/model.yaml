@@ -30,3 +30,12 @@ model_trainer_config:
   base_accuracy: 0.6
   model_config_dir: config
   model_config_file_name: train.yaml
+
+model_evaluation_config:
+  changed_threshold_score: 0.02
+  bucket_name: visapredictionsproject2024june
+  s3_model_key_path: model.pkl
+
+model_pusher_config:
+  bucket_name: visapredictionsproject2024june
+  s3_model_key_path: model.pkl
