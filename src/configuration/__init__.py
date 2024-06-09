@@ -254,5 +254,6 @@ class Configuration:
             logging.info(
                 f"Model Evaluation Details are: {model_evaluation_config_details}"
             )
+            return model_evaluation_config_details
         except Exception as e:
             raise CustomException(e, sys)
