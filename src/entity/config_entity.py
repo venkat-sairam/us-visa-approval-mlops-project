@@ -36,3 +36,11 @@ ModelTrainerConfig = namedtuple(
     "ModelTrainerConfig",
     ["trained_model_file_path", "base_accuracy", "model_config_file_path"],
 )
+
+
+ModelEvaluationConfig = namedtuple(
+    "ModelEvaluationConfig", ["changed_threshold_score", "bucket_name", "s3_model_path"]
+)
+
+
+ModelPusherConfig = namedtuple("ModelPusherConfig", ["bucket_name", "s3_model_path"])
