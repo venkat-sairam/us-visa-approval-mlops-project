@@ -29,9 +29,9 @@ TEST_FILE_NAME: str = "test_data.csv"
 SCHEMA_FILE_PATH = os.path.join("config", "schema.yaml")
 
 
-AWS_ACCESS_KEY_ID_ENV_KEY = "AWS_ACCESS_KEY_ID"
-AWS_SECRET_ACCESS_KEY_ENV_KEY = "AWS_SECRET_ACCESS_KEY"
-REGION_NAME = "us-east-1"
+AWS_ACCESS_KEY_ID_ENV_KEY = get_environment_variables("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY_ENV_KEY = get_environment_variables("AWS_SECRET_ACCESS_KEY")
+REGION_NAME = "us-east-2"
 
 
 # Pipeline details:
@@ -77,3 +77,16 @@ MODEL_TRAINER_TRAINED_MODEL_FILE_NAME_KEY = "model_file_name"
 MODEL_TRAINER_BASE_ACCURACY_KEY = "base_accuracy"
 MODEL_TRAINER_MODEL_CONFIG_DIR_KEY = "model_config_dir"
 MODEL_TRAINER_MODEL_CONFIG_FILE_NAME_KEY = "model_config_file_name"
+
+
+# Model Evaluation related variables
+MODEL_EVALUATION_CONFIG_KEY= "model_evaluation_config"
+MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE = "changed_threshold_score"
+MODEL_EVALUATION_BUCKET_NAME="bucket_name"
+MODEL_EVALUATION_S3_MODEL_PATH = "s3_model_key_path"
+
+
+# Model Pusher Constants
+MODEL_PUSHER_CONFIG_KEY ="model_pusher_config"
+MODEL_PUSHER_BUCKET_NAME="bucket_name"
+MODEL_PUSHER_S3_MODEL_PATH = "s3_model_key_path"
